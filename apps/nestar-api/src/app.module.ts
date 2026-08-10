@@ -9,7 +9,7 @@ import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), GraphQLModule.forRoot({
+  imports: [ConfigModule.forRoot(), GraphQLModule.forRoot({ //ConfigModule.forRoot() orqali biz .env ni oqishimiz mumkin bolar ekan
     driver: ApolloDriver,
     playground: true,
     uploads: false,
