@@ -12,7 +12,7 @@ import { BoardArticleModule } from './board-article/board-article.module';
   imports: [
   MemberModule,
   AuthModule,
-  PropertyModule,
+  PropertyModule, 
   BoardArticleModule,
   CommentModule,
   LikeModule,

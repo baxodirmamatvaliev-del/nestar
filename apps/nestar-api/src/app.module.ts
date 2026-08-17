@@ -9,13 +9,15 @@ import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), GraphQLModule.forRoot({ //ConfigModule.forRoot() orqali biz .env ni oqishimiz mumkin bolar ekan
+  imports:
+   [ConfigModule.forRoot(),//ConfigModule.forRoot() orqali biz .env ni oqishimiz mumkin bolar ekan
+    GraphQLModule.forRoot({ 
     driver: ApolloDriver,
     playground: true,
     uploads: false,
     autoSchemaFile: true,
   }), 
-  ComponentsModule,
+  ComponentsModule, // asosiy mantiq yani modullar  
   DatabaseModule
 ],
   controllers: [AppController],
