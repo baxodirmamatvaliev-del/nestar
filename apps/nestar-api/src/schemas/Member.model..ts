@@ -66,10 +66,15 @@ const MemberSchema = new Schema({
         default: 0
     }, 
 
-    memberFollowers: {
+    memberFollowers: { 
         type: Number,
         default: 0
     }, 
+
+    memberFollowings:{
+        type: Number,
+        default: 0
+    },
 
     memberPoints: {
         type: Number,
@@ -85,7 +90,6 @@ const MemberSchema = new Schema({
         type: Number,
         default: 0
     }, 
-
     memberComments: {
         type: Number,
         default: 0
@@ -106,7 +110,7 @@ const MemberSchema = new Schema({
         default: 0
     }, 
 
-   deleteAt: {
+   deletedAt: {
     type: Date
    }
 
