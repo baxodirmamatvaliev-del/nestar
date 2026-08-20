@@ -60,8 +60,8 @@ const MemberSchema = new Schema({
         type: Number,
         default: 0
     }, 
-
-    memberActicles: {
+ 
+    memberArticles: {  
         type: Number,
         default: 0
     }, 
