@@ -41,10 +41,10 @@ export class Member {
     memberProperties: number
 
     @Field(() => Int)
-    memberActicles: number
+    memberArcticles: number
 
     @Field(() => Int)
-    memberFollowers: number
+    memberFollowings: number
 
     @Field(() => Int)
     memberPoints: number
@@ -68,13 +68,13 @@ export class Member {
     memberBlocks: number
 
     @Field(() => Date, {nullable: true})
-    deleteAt?: Date 
+    deletedAt?: Date 
 
     @Field(() => Date)
     createdAt?: Date 
 
     @Field(() => Date)
-    updateAt?: Date 
+    updatedAt?: Date 
 
     @Field(()=> String, {nullable: true})
     accessToken?: string; 
