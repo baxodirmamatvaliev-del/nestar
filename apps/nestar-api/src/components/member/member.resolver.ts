@@ -18,6 +18,7 @@ public async login(@Args("input") input: LoginInput ): Promise<Member> {
       return this.memberService.login(input);
 }
 
+// Authenticated 
 @Mutation(() => String) 
 public async updateMember(): Promise<string> {
     console.log("Mutation: updateMember");
@@ -29,5 +30,21 @@ public async getMember(): Promise<string> {
     console.log("Query: getMember");
     return this.memberService.getMember();
 }
+
+/** ADMIN **/
+
+// Authorization: ADMIN 
+@Mutation(() => String)
+public async getAllMembersByAdmin(): Promise<string> {
+   return this.memberService.getAllMembersByAdmin();
+}
+
+// Authorization: ADMIN 
+@Mutation(() => String) 
+public async updateMemberByAdmin(): Promise<string> {
+    console.log("Mutation: updateMemberByAdminr");
+    return this.memberService.updateMemberByAdmin();
+}
+
 
 }
