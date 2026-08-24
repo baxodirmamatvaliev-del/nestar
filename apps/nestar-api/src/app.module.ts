@@ -11,20 +11,20 @@ import { T } from './libs/types/common';
 
 @Module({
   imports:
-   [ConfigModule.forRoot(),//ConfigModule.forRoot() orqali biz .env ni oqishimiz mumkin bolar ekan
-    GraphQLModule.forRoot({ 
+   [ConfigModule.forRoot(),  // N1 qoyilishi shart orqali biz .env ni oqishimiz mumkin bolar ekan
+    GraphQLModule.forRoot({ // GraphQL APi backend server qlb olyapmiz  
     driver: ApolloDriver,
     playground: true,
     uploads: false,
     autoSchemaFile: true,
-    formatError: (error: T) => {
+    formatError: (error: T) => { // Error handling GL. qlib ozimzni error larimizni yaratyapz
       const graphQLformattedError = {
         code: error?.extensions.code,
         message: error?.extensions?.excepton?.response?.message 
         || error?.extensions?.response?.message || error?.message,
       }
       console.log("GRAPHQL GLOBALL ERROR!",graphQLformattedError)
-      return graphQLformattedError;
+      return graphQLformattedError; // reaponse: users
     }
   }), 
   ComponentsModule, // asosiy mantiq yani modullar  
