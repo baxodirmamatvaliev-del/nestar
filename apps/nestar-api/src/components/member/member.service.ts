@@ -1,15 +1,16 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Member } from '../../libs/dto/member/member';
-import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
+import { Member, Members } from '../../libs/dto/member/member';
+import { AgentsInquiry, LoginInput, MemberInput } from '../../libs/dto/member/member.input';
 import { MemberStatus, MemberType } from '../../libs/enums/member.enum';
-import { Message } from '../../libs/enums/common.enum';
+import { Direction, Message } from '../../libs/enums/common.enum';
 import { AuthService } from '../auth/auth.service';
 import { MemberUpdate } from '../../libs/dto/member/member.update';
 import { T } from '../../libs/types/common';
 import { ViewService } from '../view/view.service';
 import { ViewGroup } from '../../libs/enums/view.enum';
+import { Directive } from '@nestjs/graphql';
 
 @Injectable()
 export class MemberService {
@@ -103,6 +104,28 @@ constructor(@InjectModel("Member") private readonly memberModel: Model<Member>,
     }
 
     return targetMember
+  }
+
+    public async getAgents(memberId:Types.ObjectId, input: AgentsInquiry  ): Promise<Members> {
+      const {text} =  input.search;
+      const match: T= {memberType: MemberType.AGENT, memberStatus: MemberStatus.ACTIVE}
+      const sort: T= {[input?.sort ?? "craatedAT"]: input?.direction ?? Direction.DESC}
+
+      if(text) match.memberNick = { $reges: new RegExp(text,'i')}
+      console.log("match", match)
+
+      const result = await this.memberModel.aggregate([
+        {$match: match},
+        {$sort: sort},
+        {
+          $facet:{
+            list:[{ $skip: (input.page -1 ) * input.limit}, {$limit: input.limit}],
+           metaCounter: [{ $count: 'total'}],
+          },
+        }
+      ]).exec()
+      if(!result.length) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+    return result[0]
   }
 
 
