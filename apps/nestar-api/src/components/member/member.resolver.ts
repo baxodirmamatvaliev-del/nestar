@@ -106,18 +106,18 @@ public async imageUploader(
 	console.log('Mutation: imageUploader');
 
 	if (!filename) throw new Error(Message.UPLOAD_FAILED);
-const validMime = validMimeTypes.includes(mimetype);
+const validMime = validMimeTypes.includes(mimetype); // png jpg jpeg
 if (!validMime) throw new Error(Message.PROVIDE_ALLOWED_FORMAT);
 
 const imageName = getSerialForImage(filename);
 const url = `uploads/${target}/${imageName}`;
-const stream = createReadStream();
+const stream = createReadStream(); // images yuklash mexanizm 
 
 const result = await new Promise((resolve, reject) => {
 	stream
-		.pipe(createWriteStream(url))
-		.on('finish', async () => resolve(true))
-		.on('error', () => reject(false));
+		.pipe(createWriteStream(url)) // images yuklash mexanizm  , manzil beriladi 
+		.on('finish', async () => resolve(true)) // images yuklash mexanizm , yuklansa resolve true 
+		.on('error', () => reject(false)); // images yuklash mexanizm  aks xolda error reject  false boladi
 });
 if (!result) throw new Error(Message.UPLOAD_FAILED);
 
