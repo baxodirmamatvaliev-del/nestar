@@ -16,7 +16,8 @@ import { Directive } from '@nestjs/graphql';
 export class MemberService {
 
 
-constructor(@InjectModel("Member") private readonly memberModel: Model<Member>,
+constructor(
+  @InjectModel("Member") private readonly memberModel: Model<Member>,
  private authService: AuthService,
   private wiewService: ViewService
 ) {}
