@@ -22,7 +22,7 @@ export class MemberResolver {
 
 @Mutation(() =>Member)  
 public async signup(@Args("input") input:  MemberInput): Promise<Member> {
-     console.log("Muttion:  signup");
+     console.log("Mutation: signup");
     return await this.memberService.signup(input)
  }  
 
@@ -90,7 +90,7 @@ public async getAllMembersByAdmin(@Args('input') input: MembersInquiry): Promise
 @UseGuards(RolesGuard)
 @Mutation(() => Member) 
 public async updateMemberByAdmin(@Args('input')input: MemberUpdate): Promise<Member> {
-    console.log("Mutation: updateMemberByAdminr");
+    console.log("Mutation: updateMemberByAdmin");
     return await this.memberService.updateMemberByAdmin(input);
 }
 

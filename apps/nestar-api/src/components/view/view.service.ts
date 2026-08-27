@@ -7,21 +7,21 @@ import { T } from '../../libs/types/common';
 
 @Injectable()
 export class ViewService {
-    constructor(@InjectModel("View") private readonly vievModel:Model<View>){}
+    constructor(@InjectModel("View") private readonly viewModel:Model<View>){}
 
-     public async recordWiew(input: ViewInput): Promise<View | null>{
+     public async recordView(input: ViewInput): Promise<View | null>{
        const viewExist = await this.checkViewExistence(input)
 
        if(!viewExist) {
        console.log("--- NEW View inset ---");
-       return await this.vievModel.create(input);
+       return await this.viewModel.create(input);
        }else return null
      }
 
      private async checkViewExistence(input: ViewInput): Promise<View | null> {
        const {memberId, viewRefId} =input;
        const search: T ={ memberId: memberId, viewRefId: viewRefId};
-       return await this.vievModel.findOne(search).exec();
+       return await this.viewModel.findOne(search).exec();
      }
 
 }
