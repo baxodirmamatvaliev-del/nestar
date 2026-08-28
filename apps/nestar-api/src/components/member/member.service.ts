@@ -83,7 +83,7 @@ constructor(
   }
 
  
-    public async getMember(memberId: Types.ObjectId,  targetId: Types.ObjectId): Promise<Member> {
+    public async getMember(memberId: Types.ObjectId | null,  targetId: Types.ObjectId): Promise<Member> {
     const search: T ={
       _id: targetId,
       memberStatus:{
