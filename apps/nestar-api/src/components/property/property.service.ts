@@ -254,5 +254,14 @@ public async updatePropertyByAdmin(input: PropertyUpdate): Promise<Property> {
   return result;
 }
 
+public async removePropertyByAdmin(propertyId: Types.ObjectId): Promise<Property> {
+  const search: T = { _id: propertyId,
+     propertyStatus: PropertyStatus.DELETE }; // Faqat statusi DELETE bolgan proprtyni ochira oladi 
+  const result = await this.propertyModel.findOneAndDelete(search).exec();
+  if (!result) throw new InternalServerErrorException(Message.REMOVE_FAILED);
+
+  return result;
+}
+
 
 }
