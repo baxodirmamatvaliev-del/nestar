@@ -9,6 +9,8 @@ import { StatisticModifier, T } from '../../libs/types/common';
 import { PropertyStatus } from '../../libs/enums/property.enum';
 import { ViewGroup } from '../../libs/enums/view.enum';
 import { ViewService } from '../view/view.service';
+import { PropertyUpdate } from '../../libs/dto/property/property.update';
+import moment from 'moment';
 
 @Injectable()
 export class PropertyService {
@@ -16,7 +18,7 @@ export class PropertyService {
     @InjectModel("Property") private readonly propertyModel: Model<Property>,
     private memberService: MemberService,
     private viewService: ViewService,
-){}
+ ){}
 
     public async createProperty(input: PropertyInput): Promise<Property>{
      try{
@@ -41,7 +43,7 @@ export class PropertyService {
     const targetProperty: Property | null = await this.propertyModel.findOne(search).lean().exec();
      if (!targetProperty) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
-if (memberId) { // Auth bolgan member 
+ if (memberId) { // Auth bolgan member 
   const viewInput = { memberId: memberId,
      viewRefId: propertyId, viewGroup: ViewGroup.PROPERTY }; //  member korgan PROPERTY
   const newView = await this.viewService.recordView(viewInput);
@@ -51,15 +53,14 @@ if (memberId) { // Auth bolgan member
   }
 
   // meLiked
-}
+ }
 
-targetProperty.memberData = await this.memberService.getMember(null, targetProperty.memberId);
-return targetProperty;
+ targetProperty.memberData = await this.memberService.getMember(null, targetProperty.memberId);
+ return targetProperty;
 
+ }
 
-}
-
-public async propertyStatsEditor(input: StatisticModifier): Promise<Property> {
+ public async propertyStatsEditor(input: StatisticModifier): Promise<Property> {
     const { _id, targetKey, modifier } = input;
     const result = await this.propertyModel
     .findByIdAndUpdate(_id,
@@ -69,4 +70,32 @@ public async propertyStatsEditor(input: StatisticModifier): Promise<Property> {
     if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
     return result;
   }
+
+  public async updateProperty(memberId: Types.ObjectId, input: PropertyUpdate): Promise<Property>{
+    let {propertyStatus, soldAt, deletedAt } = input;
+
+     const search: T ={ 
+        _id: input._id,
+        memberId: memberId, // <-- AGENT daxildor uy bolishi kk 
+        propertyStatus: PropertyStatus.ACTIVE,
+     };
+
+     if(propertyStatus === PropertyStatus.SOLD) soldAt = moment().toDate()
+      else if(propertyStatus === PropertyStatus.DELETE) deletedAt = moment().toDate()
+
+        const result  = await this.propertyModel
+        .findOneAndUpdate(search, input, { new: true}).exec();
+        if(!result) throw new InternalServerErrorException(Message.UPDATE_FAILED)
+
+            if(soldAt || deletedAt) { // Sold & delete bogandan song uni property sni -1 kamaytiryapmz 
+                await this.memberService.memberStatsEditor({
+                 _id: memberId,
+                 targetKey: 'memberProperties',
+                 modifier: -1,
+                });
+            }
+        
+            return result
+    }
+
 }
