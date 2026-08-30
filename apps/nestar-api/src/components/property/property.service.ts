@@ -111,15 +111,15 @@ public async getProperties(memberId: Types.ObjectId, input: PropertiesInquiry): 
       { $match: match },
       { $sort: sort },
       {
-        $facet: {
-          list: [
+        $facet: { // 1 ta sorov ichida 2 ta sorov tayorlaydi
+          list: [ // sahifadagi propertylar 
             { $skip: (input.page - 1) * input.limit },
             { $limit: input.limit },
             // meLiked
             lookupMember,
-            { $unwind: '$memberData' },
+            { $unwind: '$memberData' }, // propertyni egasi
           ],
-          metaCounter: [{ $count: 'total' }],
+          metaCounter: [{ $count: 'total' }], // filterga mos propertylarni umumiy soni
         },
       },
     ])
@@ -129,7 +129,7 @@ public async getProperties(memberId: Types.ObjectId, input: PropertiesInquiry): 
   return result[0];
 }
 
-private shapeMatchQuery(match: T, input: PropertiesInquiry): void {
+private shapeMatchQuery(match: T, input: PropertiesInquiry): void { 
   const {
     memberId,
     locationList,
@@ -141,15 +141,15 @@ private shapeMatchQuery(match: T, input: PropertiesInquiry): void {
     squaresRange,
     options,
     text,
-  } = input.search;
+  } = input.search; // client yubirgan input.search asosida MongoDB query yaradati
 
-  if (memberId) match.memberId = shapeIntoMongoObjectId(memberId);
+  if (memberId) match.memberId = shapeIntoMongoObjectId(memberId); //Xonalar, yotoqlar va property turi bo‘yicha filterlaydi
   if (locationList) match.propertyLocation = { $in: locationList };
   if (roomsList) match.propertyRooms = { $in: roomsList };
   if (bedsList) match.propertyBeds = { $in: bedsList };
   if (typeList) match.propertyType = { $in: typeList };
-
-  if (pricesRange) match.propertyPrice = { $gte: pricesRange.start, $lte: pricesRange.end };
+                     
+  if (pricesRange) match.propertyPrice = { $gte: pricesRange.start, $lte: pricesRange.end }; //Narx diapazoni:
   if (periodsRange) match.createdAt = { $gte: periodsRange.start, $lte: periodsRange.end };
   if (squaresRange) match.propertySquare = { $gte: squaresRange.start, $lte: squaresRange.end };
 
@@ -163,7 +163,8 @@ private shapeMatchQuery(match: T, input: PropertiesInquiry): void {
 
 public async getAgentProperties(memberId: Types.ObjectId, input: AgentPropertiesInquiry): Promise<Properties> {
   const { propertyStatus } = input.search;
-  if (propertyStatus === PropertyStatus.DELETE) throw new BadRequestException(Message.NOT_ALLOWED_REQUEST);
+  if (propertyStatus === PropertyStatus.DELETE) 
+    throw new BadRequestException(Message.NOT_ALLOWED_REQUEST);
 
   const match: T = {
     memberId: memberId,
@@ -176,14 +177,14 @@ public async getAgentProperties(memberId: Types.ObjectId, input: AgentProperties
       { $match: match },
       { $sort: sort },
       {
-        $facet: {
-          list: [
+        $facet: { // 1 ta sorov ichida 2 ta sorov tayorlaydi
+          list: [ // sahifadagi propertylar 
             { $skip: (input.page - 1) * input.limit },
             { $limit: input.limit },
             lookupMember,
-            { $unwind: '$memberData' },
+            { $unwind: '$memberData' },// propertyni egasi
           ],
-          metaCounter: [{ $count: 'total' }],
+          metaCounter: [{ $count: 'total' }], // filterga mos propertylarni umumiy soni
         },
       },
     ])

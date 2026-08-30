@@ -54,17 +54,17 @@ export class PropertyResolver {
     }
 
 
-    @UseGuards(WithoutGuard)
-    @Query((returns) => Properties)
-    public async getProperties(
-        @Args('input') input: PropertiesInquiry,
-        @AuthMember('_id') memberId: Types.ObjectId
-    ): Promise<Properties> {
-        console.log('Query: getProperties')
-        return await this.propertyService.getProperties(memberId, input)
-    }
+@UseGuards(WithoutGuard)
+@Query((returns) => Properties)
+public async getProperties(
+@Args('input') input: PropertiesInquiry,
+@AuthMember('_id') memberId: Types.ObjectId
+): Promise<Properties> {
+console.log('Query: getProperties')
+return await this.propertyService.getProperties(memberId, input)
+}
 
-    @Roles(MemberType.AGENT)
+@Roles(MemberType.AGENT)
 @UseGuards(RolesGuard)
 @Query((returns) => Properties)
 public async getAgentProperties(
