@@ -1,6 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsIn, IsNotEmpty, IsOptional, Length, Min } from 'class-validator';
-import { ObjectId, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { CommentGroup } from '../../enums/comment.enum';
 import { Direction } from '../../enums/common.enum';
 import { availableCommentSorts } from '../../config';
@@ -20,7 +20,7 @@ export class CommentInput {
 	@Field(() => String)
 	commentRefId: Types.ObjectId;
 
-	memberId?: ObjectId;
+	memberId?: Types.ObjectId;
 }
 
 @InputType()

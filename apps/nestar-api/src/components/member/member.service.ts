@@ -168,7 +168,7 @@ constructor(
   public async memberStatsEditor(input: StatisticModifier,): Promise<Member>{
     console.log("executed: memberStatsEditor ")
     const {_id , targetKey, modifier} = input;
-    const result =  await this.memberModel.findOneAndUpdate(_id,
+    const result =  await this.memberModel.findByIdAndUpdate(_id,
       { $inc: { [targetKey]: modifier }}, { new: true }).exec();
 
       if(!result) {
