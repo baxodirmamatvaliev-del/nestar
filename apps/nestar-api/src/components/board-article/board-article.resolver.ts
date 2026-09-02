@@ -71,8 +71,6 @@ public async likeTargetBoardArticle(
    return await this.boardArticleService.likeTargetBoardArticle(memberId, likeRefId)
 }
 
-
-
 /** ADMIN **/
 
 @Roles(MemberType.ADMIN)
