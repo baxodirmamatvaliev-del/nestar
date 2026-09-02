@@ -68,6 +68,16 @@ public async getMember(@Args('memberId') input: string,@AuthMember('_id') member
     return await this.memberService.getMember(memberId,targetId);
 }
 
+@UseGuards(AuthGuard)
+@Mutation(()=> Member)
+public async likeTargetMember(
+	@Args('memberId') input: string,
+	@AuthMember('_id') memberId:Types.ObjectId,
+): Promise<Member>{
+	 console.log("Mutation: likeTargetMember");
+	 const likeRefId = shapeIntoMongoObjectId(input)
+	 return await this.memberService.likeTargetMember(memberId, likeRefId)
+}
 
 @UseGuards(WithoutGuard)
 @Query(() => Members)
