@@ -35,7 +35,7 @@ export const lookupMember = { //Moongos query sintaksisda ishlatamz
 
 	$lookup: {
 
-      from: "members",
+    from: "members",
 	  localField: "memberId",
 	  foreignField: "_id",
 	  as: "memberData"
@@ -43,3 +43,30 @@ export const lookupMember = { //Moongos query sintaksisda ishlatamz
 	}
 
 }
+
+export const lookupFollowingData = {
+  
+  	$lookup: {
+
+    from: "members",
+	  localField: "followingId",
+	  foreignField: "_id",
+	  as: "followingData"
+
+	}
+
+}
+
+export const lookupFollowerData = {
+  
+  	$lookup: {
+
+    from: "members",
+	  localField: "followerId",
+	  foreignField: "_id",
+	  as: "followerData"
+
+	}
+
+}
+
