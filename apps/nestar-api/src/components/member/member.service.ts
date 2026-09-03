@@ -14,6 +14,7 @@ import { Directive } from '@nestjs/graphql';
 import { LikeInput } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { LikeService } from '../like/like.service';
+import { Follower, Following, MeFollowed } from '../../libs/dto/follow/follow';
 
 @Injectable()
 export class MemberService {
@@ -21,6 +22,7 @@ export class MemberService {
 
 constructor(
   @InjectModel("Member") private readonly memberModel: Model<Member>,
+  @InjectModel("Follow") private readonly followModel: Model<Follower | Following>,
  private authService: AuthService,
   private viewService: ViewService,
   private likeService: LikeService
@@ -111,10 +113,17 @@ constructor(
      const likeInput = { memberId: memberId, likeRefId: targetId, likeGroup: LikeGroup.MEMBER };
      targetMember.meLiked = await this.likeService.checkLikeExistence(likeInput)
 
+     //meFollowed
+     targetMember.meFollowed = await this.checkSubscription(memberId, targetId)
     }
 
     return targetMember
   }
+
+    private async checkSubscription( followerId: Types.ObjectId,followingId: Types.ObjectId,): Promise<MeFollowed[]> {
+    const result = await this.followModel.findOne({ followingId, followerId }).exec();
+    return result ? [{ followerId, followingId, myFollowing: true }] : [];
+  } 
 
     public async getAgents(memberId:Types.ObjectId, input: AgentsInquiry  ): Promise<Members> {
       const {text} =  input.search;
@@ -191,7 +200,7 @@ constructor(
   }
 
 
-    public async updateMemberByAdmin(input: MemberUpdate): Promise<Member> {
+  public async updateMemberByAdmin(input: MemberUpdate): Promise<Member> {
       const result: Member | null = await this.memberModel
       .findOneAndUpdate({ _id: input._id }, input , { new: true }).exec();
 
