@@ -35,8 +35,10 @@ export class FollowService {
 		try {
 			return await this.followModel.create({ followerId, followingId });
 		} catch (err) {
-			console.log('Error, Service.model:', err.message);
-			throw new BadRequestException(Message.CREATE_FAILED);
+             if(err.code === 11000) {
+				throw new BadRequestException(Message.ALREADY_SUBSCRIBED)
+			 }
+			 throw new BadRequestException(Message.CREATE_FAILED)
 		}
 	}
 
@@ -48,7 +50,7 @@ export class FollowService {
 			followingId: followingId,
 			followerId: followerId,
 		}).exec();
-		if (!result) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+		if (!result) throw new InternalServerErrorException(Message.NOT_SUBSCRIBED);
 
 		await this.memberService.memberStatsEditor({ _id: followerId, targetKey: 'memberFollowings', modifier: -1 });
 		await this.memberService.memberStatsEditor({ _id: followingId, targetKey: 'memberFollowers', modifier: -1 });
