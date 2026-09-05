@@ -162,6 +162,10 @@ private shapeMatchQuery(match: T, input: PropertiesInquiry): void {
       return await this.likeService.getFavoriteProperties(memberId, input);
   }
 
+   public async getVisited(memberId:Types.ObjectId , input:OrdinaryInquiry): Promise<Properties> {
+      return await this.viewService.getVisitedProperties(memberId, input);
+  }
+
 public async getAgentProperties(memberId: Types.ObjectId, input: AgentPropertiesInquiry): Promise<Properties> {
   const { propertyStatus } = input.search;
   if (propertyStatus === PropertyStatus.DELETE) 
