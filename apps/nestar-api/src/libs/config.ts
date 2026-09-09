@@ -33,20 +33,20 @@ export const shapeIntoMongoObjectId = (target: any) => {
 
 export const lookupAuthMemberLiked = (memberId: T, targetRefId: string = '$_id') => {
 	return {
-		$lookup: {
-			from: 'likes',
+		$lookup: { //MongoDB’da boshqa collection bilan bog‘lanish boshlanadi
+			from: 'likes', //Ma’lumot likes collection ichidan qidiriladi.
 			let: {
-				localLikeRefId: targetRefId,
-				localMemberId: memberId,
-				localMyFavorite: true,
+				localLikeRefId: targetRefId, //qaysi obyekt tekshirilmoqda
+				localMemberId: memberId, //qaysi foydalanuvchi tekshirilmoqda
+				localMyFavorite: true, //like topilsa qaytariladigan true qiymati
 			},
 			pipeline: [
 				{
 					$match: {
 						$expr: {
 							$and: [
-								{ $eq: ['$likeRefId', '$$localLikeRefId'] },
-								{ $eq: ['$memberId', '$$localMemberId'] },
+								{ $eq: ['$likeRefId', '$$localLikeRefId'] },//Bu like yozuvini ikki shart bilan qidiradi
+								{ $eq: ['$memberId', '$$localMemberId'] }, //kkalasi ham mos kelsa, demak shu foydalanuvchi shu obyektga like bosgan.
 							],
 						},
 					},
@@ -56,8 +56,8 @@ export const lookupAuthMemberLiked = (memberId: T, targetRefId: string = '$_id')
 						_id: 0,
 						memberId: 1,
 						likeRefId: 1,
-						myFavorite: '$$localMyFavorite',
-					},
+						myFavorite: '$$localMyFavorite',//Frontendga foydalanuvchi shu obyektga like bosganini ko‘rsatadigan ma’lumot beradi:
+					},//Shu orqali yurakcha qizil yoki faol holatda ko‘rsatiladi
 				},
 			],
 			as: 'meLiked',

@@ -44,7 +44,7 @@ export class ViewService {
                      as: "visitedProperty",
                  },
              },
-             { $unwind: "$visitedProperty" },
+             { $unwind: "$visitedProperty" }, // array X
              {
                  $facet: {
                      list: [
