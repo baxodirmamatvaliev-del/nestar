@@ -1,7 +1,7 @@
 import { ObjectId } from "bson";
 import { T } from './types/common';
 
-export const availableAgentsSorts = ['createdAt', 'updatedAt', 'memberLikes', 'memberViews', 'memberRanks']
+export const availableAgentsSorts = ['createdAt', 'updatedAt', 'memberLikes', 'memberViews', 'memberRank']
 export const availableMemberSorts = ['createdAt', 'updatedAt', 'memberLikes', 'memberViews']
 export const availableOptions =[ 'propertyBarter','propertyRent' ]
 export const availablePropertySorts =[

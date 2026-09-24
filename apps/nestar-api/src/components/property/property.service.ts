@@ -141,10 +141,10 @@ private shapeMatchQuery(match: T, input: PropertiesInquiry): void {
   } = input.search; // client yubirgan input.search asosida MongoDB query yaradati
 
   if (memberId) match.memberId = shapeIntoMongoObjectId(memberId); //Xonalar, yotoqlar va property turi bo‘yicha filterlaydi
-  if (locationList) match.propertyLocation = { $in: locationList };
-  if (roomsList) match.propertyRooms = { $in: roomsList };
-  if (bedsList) match.propertyBeds = { $in: bedsList };
-  if (typeList) match.propertyType = { $in: typeList };
+  if (locationList && locationList.length) match.propertyLocation = { $in: locationList };
+  if (roomsList && roomsList.length) match.propertyRooms = { $in: roomsList };
+  if (bedsList && bedsList.length) match.propertyBeds = { $in: bedsList };
+  if (typeList&& typeList.length) match.propertyType = { $in: typeList };
                      
   if (pricesRange) match.propertyPrice = { $gte: pricesRange.start, $lte: pricesRange.end }; //Narx diapazoni:
   if (periodsRange) match.createdAt = { $gte: periodsRange.start, $lte: periodsRange.end };
